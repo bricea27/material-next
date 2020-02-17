@@ -11,7 +11,7 @@ export default function Index() {
   const [state, setState] = useState({ characters: [] });
 
   const getCharacter = async id => {
-    const result = await fetch(`${SELF_URL}${API}/hero/${id}`);
+    const result = await fetch(`${SELF_URL}${API}/character/${id}`);
     const data = await result.json();
     return data;
   };
