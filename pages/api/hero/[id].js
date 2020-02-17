@@ -7,11 +7,11 @@ export default async (req, res) => {
     query: { id }
   } = req;
 
-  console.log(config, config.SUPERHEROAPI_KEY);
-
   const result = await fetch(
-    `http://www.superheroapi.com/api/${config.SUPERHEROAPI_KEY}/1`
+    `http://www.superheroapi.com/api/${config.SUPERHEROAPI_KEY}/${id}`
   );
+
   const data = await result.json();
+
   res.send(data);
 };

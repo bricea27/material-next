@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 module.exports = {
   publicRuntimeConfig: {
     API: process.env.API,
