@@ -1,0 +1,15 @@
+{
+	"printWidth": 80,
+	"useTabs": true,
+	"singleQuote": true,
+	"endOfLine": "lf",
+	"overrides": [
+		{
+			"files": "package*.json",
+			"options": {
+				"useTabs": false,
+				"tabWidth": 2
+			}
+		}
+	]
+}
