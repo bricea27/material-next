@@ -3,7 +3,11 @@ import { useEffect, useState } from 'react';
 
 import { motion } from 'framer-motion';
 
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+
+import Character from 'components/super-showdown/character';
 
 const { publicRuntimeConfig: config } = getConfig();
 const ID_LIMIT = 731;
@@ -12,7 +16,15 @@ const getRandomId = () => {
 	return Math.floor(Math.random() * ID_LIMIT) + 1;
 };
 
+const useStyles = makeStyles(theme => ({
+	root: {
+		height: '100vh',
+		padding: theme.spacing(2)
+	}
+}));
+
 export default function Index() {
+	const classes = useStyles();
 	const { API, SELF_URL } = config;
 	const [state, setState] = useState({ loading: true, characters: [] });
 
@@ -62,19 +74,20 @@ export default function Index() {
 	};
 
 	return (
-		<>
-			<Typography variant="h1">Super Showdown</Typography>
+		<Container className={classes.root} maxWidth={false}>
 			{!state.loading && (
 				<motion.div variants={container} initial="hidden" animate="show">
 					{state.characters.map(character => {
 						return (
 							<motion.div key={character.id} variants={item}>
-								<Typography variant="h2">{character.name}</Typography>
+								<Character>
+									<Typography variant="h2">{character.name}</Typography>
+								</Character>
 							</motion.div>
 						);
 					})}
 				</motion.div>
 			)}
-		</>
+		</Container>
 	);
 }
