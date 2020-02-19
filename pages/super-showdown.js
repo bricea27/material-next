@@ -1,14 +1,13 @@
 import getConfig from 'next/config';
 import { useEffect, useState } from 'react';
 
-import { motion } from 'framer-motion';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
 
+import Characters from 'components/super-showdown/characters';
 import Character from 'components/super-showdown/character';
 import CharacterImage from 'components/super-showdown/character-image';
+import CharacterTitle from 'components/super-showdown/character-title';
 
 const { publicRuntimeConfig: config } = getConfig();
 const ID_LIMIT = 731;
@@ -47,51 +46,22 @@ export default function Index() {
 		getCharacters();
 	}, []);
 
-	const container = {
-		hidden: { opacity: 0 },
-		show: {
-			opacity: 1,
-			transition: {
-				staggerChildren: 0.5
-			}
-		}
-	};
-
-	const item = {
-		hidden: {
-			y: 50,
-			opacity: 0,
-			transition: {
-				y: { stiffness: 1000 }
-			}
-		},
-		show: {
-			y: 0,
-			opacity: 1,
-			transition: {
-				y: { stiffness: 1000, velocity: -100 }
-			}
-		}
-	};
-
 	return (
-		<Container className={classes.root} maxWidth={false}>
+		<Container className={classes.root}>
 			{!state.loading && (
-				<motion.div variants={container} initial="hidden" animate="show">
+				<Characters>
 					{state.characters.map(character => {
 						return (
-							<motion.div key={character.id} variants={item}>
-								<Character>
-									<CharacterImage
-										image={character.image.url}
-										title={character.name}
-									/>
-									<Typography variant="h2">{character.name}</Typography>
-								</Character>
-							</motion.div>
+							<Character key={character.id}>
+								<CharacterImage
+									image={character.image.url}
+									title={character.name}
+								/>
+								<CharacterTitle>{character.name}</CharacterTitle>
+							</Character>
 						);
 					})}
-				</motion.div>
+				</Characters>
 			)}
 		</Container>
 	);

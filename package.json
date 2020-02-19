@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "latest",
+    "@material-ui/lab": "^4.0.0-alpha.43",
     "clsx": "latest",
     "dotenv": "^8.2.0",
     "framer-motion": "^1.8.4",
