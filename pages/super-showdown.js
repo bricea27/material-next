@@ -8,6 +8,7 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
 import Character from 'components/super-showdown/character';
+import CharacterImage from 'components/super-showdown/character-image';
 
 const { publicRuntimeConfig: config } = getConfig();
 const ID_LIMIT = 731;
@@ -81,6 +82,10 @@ export default function Index() {
 						return (
 							<motion.div key={character.id} variants={item}>
 								<Character>
+									<CharacterImage
+										image={character.image.url}
+										title={character.name}
+									/>
 									<Typography variant="h2">{character.name}</Typography>
 								</Character>
 							</motion.div>
