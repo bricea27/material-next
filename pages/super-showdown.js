@@ -8,8 +8,6 @@ import SyncIcon from '@material-ui/icons/Sync';
 
 import Characters from 'components/super-showdown/characters';
 import Character from 'components/super-showdown/character';
-import CharacterImage from 'components/super-showdown/character-image';
-import CharacterTitle from 'components/super-showdown/character-title';
 
 const { publicRuntimeConfig: config } = getConfig();
 const ID_LIMIT = 731;
@@ -28,7 +26,12 @@ const useStyles = makeStyles(theme => ({
 export default function Index() {
 	const classes = useStyles();
 	const { API, SELF_URL } = config;
-	const [state, setState] = useState({ loading: true });
+	const initialState = {
+		loading: true,
+		character1: null,
+		character2: null
+	};
+	const [state, setState] = useState(initialState);
 
 	const getCharacter = async id => {
 		const result = await fetch(`${SELF_URL}${API}/character/${id}`);
@@ -45,7 +48,7 @@ export default function Index() {
 	};
 
 	const handleClickShuffle = async () => {
-		setState(state => ({ ...state, loading: true }));
+		setState(state => ({ ...state, ...initialState }));
 		await getCharacters();
 		setState(state => ({ ...state, loading: false }));
 	};
@@ -59,33 +62,13 @@ export default function Index() {
 	return (
 		<Container className={classes.root}>
 			<Characters>
-				{state.character1 ? (
-					<Character>
-						<CharacterImage
-							image={state.character1.image.url}
-							title={state.character1.name}
-						/>
-						<CharacterTitle>{state.character1.name}</CharacterTitle>
-					</Character>
-				) : (
-					<Character>Loading</Character>
-				)}
+				<Character data={state.character1} />
 
 				<IconButton onClick={handleClickShuffle}>
 					<SyncIcon />
 				</IconButton>
 
-				{state.character2 ? (
-					<Character>
-						<CharacterImage
-							image={state.character2.image.url}
-							title={state.character2.name}
-						/>
-						<CharacterTitle>{state.character2.name}</CharacterTitle>
-					</Character>
-				) : (
-					<Character>Loading</Character>
-				)}
+				<Character data={state.character2} />
 			</Characters>
 		</Container>
 	);
