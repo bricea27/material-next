@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import IconButton from '@material-ui/core/IconButton';
+import SyncIcon from '@material-ui/icons/Sync';
 
 import Characters from 'components/super-showdown/characters';
 import Character from 'components/super-showdown/character';
@@ -26,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 export default function Index() {
 	const classes = useStyles();
 	const { API, SELF_URL } = config;
-	const [state, setState] = useState({ loading: true, characters: [] });
+	const [state, setState] = useState({ loading: true });
 
 	const getCharacter = async id => {
 		const result = await fetch(`${SELF_URL}${API}/character/${id}`);
@@ -35,34 +37,56 @@ export default function Index() {
 	};
 
 	const getCharacters = async () => {
-		const characters = await Promise.all([
-			getCharacter(getRandomId()),
-			getCharacter(getRandomId())
-		]);
-		setState(state => ({ ...state, loading: false, characters }));
+		const character1 = await getCharacter(getRandomId());
+		setState(state => ({ ...state, character1 }));
+
+		const character2 = await getCharacter(getRandomId());
+		setState(state => ({ ...state, character2 }));
+	};
+
+	const handleClickShuffle = async () => {
+		setState(state => ({ ...state, loading: true }));
+		await getCharacters();
+		setState(state => ({ ...state, loading: false }));
 	};
 
 	useEffect(() => {
-		getCharacters();
+		getCharacters().then(() => {
+			setState(state => ({ ...state, loading: false }));
+		});
 	}, []);
 
 	return (
 		<Container className={classes.root}>
-			{!state.loading && (
-				<Characters>
-					{state.characters.map(character => {
-						return (
-							<Character key={character.id}>
-								<CharacterImage
-									image={character.image.url}
-									title={character.name}
-								/>
-								<CharacterTitle>{character.name}</CharacterTitle>
-							</Character>
-						);
-					})}
-				</Characters>
-			)}
+			<Characters>
+				{state.character1 ? (
+					<Character>
+						<CharacterImage
+							image={state.character1.image.url}
+							title={state.character1.name}
+						/>
+						<CharacterTitle>{state.character1.name}</CharacterTitle>
+					</Character>
+				) : (
+					<Character>Loading</Character>
+				)}
+
+				<IconButton onClick={handleClickShuffle}>
+					<SyncIcon />
+				</IconButton>
+
+				{state.character2 ? (
+					<Character>
+						<CharacterImage
+							image={state.character2.image.url}
+							title={state.character2.name}
+						/>
+						<CharacterTitle>{state.character2.name}</CharacterTitle>
+					</Character>
+				) : (
+					<Character>Loading</Character>
+				)}
+			</Characters>
 		</Container>
 	);
 }
